@@ -4,215 +4,493 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>For My Shattoh 💖</title>
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Playfair+Display:ital,wght@0,700;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap');
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --rose:     #e8446a;
+      --rose-lt:  #f07090;
+      --blush:    #fde8ef;
+      --blush2:   #fdf0f5;
+      --cream:    #fffaf9;
+      --mauve:    #c9607a;
+      --text:     #3a1a26;
+      --muted:    #9a6070;
+      --card-bg:  rgba(255,255,255,0.72);
+    }
+
+    html { scroll-behavior: smooth; }
+
     body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #ffe4f0, #fff0f6, #fce4ec, #ffd6e7);
-      background-size: 400% 400%;
-      animation: bgShift 8s ease infinite;
-      min-height: 100vh;
+      font-family: 'DM Sans', sans-serif;
+      background-color: var(--cream);
+      color: var(--text);
       overflow-x: hidden;
+      cursor: none;
     }
-    @keyframes bgShift {
-      0%   { background-position: 0% 50%; }
-      50%  { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    .dancing { font-family: 'Dancing Script', cursive; }
-    /* Floating hearts */
-    .hearts-container {
+
+    /* Custom cursor */
+    #cursor {
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      width: 16px; height: 16px;
+      background: var(--rose);
+      border-radius: 50%;
       pointer-events: none;
-      z-index: 0;
-      overflow: hidden;
+      z-index: 99999;
+      transform: translate(-50%,-50%);
+      transition: width 0.2s, height 0.2s;
+      mix-blend-mode: multiply;
     }
-    .floating-heart {
-      position: absolute;
-      bottom: -60px;
-      font-size: 1.5rem;
-      animation: floatUp linear infinite;
-      opacity: 0.6;
+    #cursor-trail {
+      position: fixed;
+      width: 38px; height: 38px;
+      border: 1.5px solid var(--rose-lt);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 99998;
+      transform: translate(-50%,-50%);
+      transition: left 0.12s ease, top 0.12s ease;
+      opacity: 0.45;
     }
-    @keyframes floatUp {
-      0%   { transform: translateY(0) rotate(0deg); opacity: 0.6; }
-      100% { transform: translateY(-110vh) rotate(30deg); opacity: 0; }
-    }
-    /* Beating heart */
-    .beat {
-      animation: beat 1.2s ease-in-out infinite;
-      display: inline-block;
-    }
-    @keyframes beat {
-      0%, 100% { transform: scale(1); }
-      25%       { transform: scale(1.15); }
-      50%       { transform: scale(1); }
-      75%       { transform: scale(1.1); }
-    }
-    /* Glass card */
-    .glass {
-      background: rgba(255, 255, 255, 0.55);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border: 1.5px solid rgba(255, 182, 193, 0.4);
-      border-radius: 24px;
-      box-shadow: 0 8px 32px rgba(255, 105, 135, 0.12);
-    }
-    /* Glow button */
-    .glow-btn {
-      background: linear-gradient(135deg, #ff6b9d, #ff4e8b);
-      color: white;
-      border: none;
-      border-radius: 50px;
-      padding: 14px 36px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 4px 20px rgba(255, 78, 139, 0.4);
-      transition: transform 0.2s, box-shadow 0.2s;
-      font-family: 'Poppins', sans-serif;
-    }
-    .glow-btn:hover {
-      transform: translateY(-3px) scale(1.05);
-      box-shadow: 0 8px 30px rgba(255, 78, 139, 0.55);
-    }
-    .glow-btn:active { transform: scale(0.97); }
-    /* Promise card */
-    .promise-card {
-      background: rgba(255,255,255,0.6);
-      border-radius: 18px;
-      padding: 20px;
-      border-left: 4px solid #ff6b9d;
-      box-shadow: 0 4px 15px rgba(255,107,157,0.1);
-      transition: transform 0.2s;
-    }
-    .promise-card:hover { transform: translateY(-4px); }
-    /* Love reason card */
-    .love-card {
-      background: linear-gradient(135deg, rgba(255,192,203,0.4), rgba(255,240,246,0.7));
-      border-radius: 18px;
-      padding: 20px;
-      text-align: center;
-      border: 1px solid rgba(255,182,193,0.5);
-      transition: transform 0.25s;
-    }
-    .love-card:hover { transform: scale(1.05); }
-    /* Envelope */
-    .envelope {
-      font-size: 5rem;
-      cursor: pointer;
-      transition: transform 0.3s;
-      display: inline-block;
-    }
-    .envelope:hover { transform: scale(1.2) rotate(-5deg); }
-    /* Modal */
-    .modal-overlay {
-      display: none;
+
+    /* Background mesh */
+    body::before {
+      content: '';
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.45);
-      z-index: 999;
-      justify-content: center;
+      background:
+        radial-gradient(ellipse 80% 60% at 15% 10%, rgba(232,68,106,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 85% 85%, rgba(240,112,144,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 50% at 50% 50%, rgba(253,232,239,0.45) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Floating petals */
+    .petals-wrap {
+      position: fixed; inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+    .petal {
+      position: absolute;
+      bottom: -40px;
+      opacity: 0;
+      animation: petalFloat linear infinite;
+    }
+    @keyframes petalFloat {
+      0%   { transform: translateY(0) rotate(0deg) scale(0.8); opacity: 0; }
+      10%  { opacity: 0.5; }
+      90%  { opacity: 0.3; }
+      100% { transform: translateY(-105vh) rotate(360deg) scale(1.1); opacity: 0; }
+    }
+
+    section, footer { position: relative; z-index: 2; }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
       align-items: center;
-      padding: 20px;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 24px 60px;
+    }
+    .hero-eyebrow {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--rose);
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-eyebrow::before, .hero-eyebrow::after {
+      content: '';
+      width: 36px; height: 1px;
+      background: var(--rose-lt);
+    }
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.5rem, 9vw, 7rem);
+      font-style: italic;
+      color: var(--rose);
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+    .hero-heart {
+      display: inline-block;
+      animation: heartbeat 1.4s ease-in-out infinite;
+      vertical-align: middle;
+    }
+    @keyframes heartbeat {
+      0%,100% { transform: scale(1); }
+      20% { transform: scale(1.18); }
+      40% { transform: scale(1); }
+      60% { transform: scale(1.1); }
+    }
+    .hero-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.1rem, 2.5vw, 1.45rem);
+      font-style: italic;
+      color: var(--mauve);
+      margin-bottom: 44px;
+    }
+
+    /* Glass card */
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(232,68,106,0.18);
+      border-radius: 28px;
+      box-shadow: 0 4px 40px rgba(232,68,106,0.1), 0 1px 0 rgba(255,255,255,0.8) inset;
+    }
+
+    .hero-card {
+      max-width: 560px;
+      width: 100%;
+      padding: 36px 40px;
+      margin-bottom: 40px;
+    }
+    @media(max-width:480px){ .hero-card { padding: 28px 22px; } }
+    .hero-card p {
+      font-size: 0.96rem;
+      line-height: 1.8;
+      color: #5a3040;
+      margin-bottom: 18px;
+    }
+    .hero-card .hint {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+    .pills-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+    }
+    .pill {
+      background: rgba(232,68,106,0.07);
+      border: 1px solid rgba(232,68,106,0.22);
+      color: var(--mauve);
+      border-radius: 999px;
+      padding: 7px 17px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      transition: background 0.2s, transform 0.2s;
+      cursor: default;
+    }
+    .pill:hover { background: rgba(232,68,106,0.14); transform: translateY(-2px); }
+
+    /* Button */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #e8446a, #c9306a);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      padding: 16px 44px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 6px 28px rgba(232,68,106,0.38), 0 1px 0 rgba(255,255,255,0.2) inset;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 12px 36px rgba(232,68,106,0.5); }
+    .btn-primary:active { transform: scale(0.97); }
+
+    /* Section header */
+    .sec-header { text-align: center; margin-bottom: 40px; }
+    .sec-label {
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--rose);
+      margin-bottom: 10px;
+    }
+    .sec-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-style: italic;
+      color: var(--text);
+      line-height: 1.15;
+      margin-bottom: 10px;
+    }
+    .sec-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--muted);
+    }
+    .divider {
+      display: flex; align-items: center; justify-content: center;
+      gap: 12px; margin: 0 auto 52px; max-width: 260px;
+    }
+    .divider::before { content:''; flex:1; height:1px; background: linear-gradient(to right, transparent, rgba(232,68,106,0.3)); }
+    .divider::after  { content:''; flex:1; height:1px; background: linear-gradient(to left,  transparent, rgba(232,68,106,0.3)); }
+    .divider span { font-size: 0.85rem; }
+
+    /* ===== APOLOGY ===== */
+    .apology-section { padding: 100px 24px; max-width: 960px; margin: 0 auto; }
+    .apology-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      margin-bottom: 52px;
+    }
+    @media(max-width:600px){ .apology-grid { grid-template-columns: 1fr; } }
+    .apology-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(232,68,106,0.15);
+      border-radius: 24px;
+      padding: 32px 28px;
+      text-align: center;
+      box-shadow: 0 2px 20px rgba(232,68,106,0.07);
+      transition: transform 0.25s, box-shadow 0.25s;
+      position: relative; overflow: hidden;
+    }
+    .apology-card::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:3px;
+      background: linear-gradient(90deg, var(--rose), var(--rose-lt));
+    }
+    .apology-card:hover { transform: translateY(-6px); box-shadow: 0 14px 40px rgba(232,68,106,0.14); }
+    .apology-card .icon { font-size: 2.2rem; margin-bottom: 14px; }
+    .apology-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.12rem;
+      color: var(--rose);
+      margin-bottom: 10px;
+    }
+    .apology-card p { font-size: 0.86rem; line-height: 1.75; color: var(--muted); }
+
+    .envelope-area { text-align: center; padding-top: 36px; }
+    .envelope-hint {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+    .envelope {
+      font-size: 4.5rem; cursor: pointer; display: inline-block;
+      transition: transform 0.3s;
+      filter: drop-shadow(0 4px 12px rgba(232,68,106,0.25));
+    }
+    .envelope:hover { transform: scale(1.2) rotate(-6deg); }
+
+    /* ===== PROMISES ===== */
+    .promises-section { padding: 100px 24px; max-width: 880px; margin: 0 auto; }
+    .promises-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    @media(max-width:560px){ .promises-grid { grid-template-columns: 1fr; } }
+    .promise-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(232,68,106,0.13);
+      border-radius: 20px;
+      padding: 24px 22px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      box-shadow: 0 2px 16px rgba(232,68,106,0.06);
+      transition: transform 0.22s, box-shadow 0.22s;
+      text-align: left;
+    }
+    .promise-card:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(232,68,106,0.13); }
+    .promise-icon {
+      width: 44px; height: 44px;
+      background: var(--blush);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.25rem;
+      flex-shrink: 0;
+      border: 1px solid rgba(232,68,106,0.14);
+    }
+    .promise-body h4 { font-weight: 500; font-size: 0.9rem; color: var(--rose); margin-bottom: 6px; }
+    .promise-body p { font-size: 0.8rem; line-height: 1.7; color: var(--muted); }
+
+    /* ===== LOVE ===== */
+    .love-section { padding: 100px 24px; max-width: 880px; margin: 0 auto; }
+    .love-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 16px;
+    }
+    @media(max-width:680px){ .love-grid { grid-template-columns: repeat(2,1fr); } }
+    @media(max-width:420px){ .love-grid { grid-template-columns: 1fr; } }
+    .love-card {
+      background: linear-gradient(145deg, rgba(253,232,239,0.7), rgba(255,255,255,0.85));
+      border: 1px solid rgba(232,68,106,0.14);
+      border-radius: 20px;
+      padding: 28px 18px;
+      text-align: center;
+      transition: transform 0.25s;
+      box-shadow: 0 2px 14px rgba(232,68,106,0.06);
+    }
+    .love-card:hover { transform: scale(1.05) translateY(-3px); }
+    .love-card .lc-icon { font-size: 2rem; margin-bottom: 10px; }
+    .love-card p { font-size: 0.83rem; font-weight: 500; color: var(--mauve); line-height: 1.5; }
+
+    /* ===== ALWAYS WITH YOU ===== */
+    .always-section { padding: 100px 24px; display: flex; justify-content: center; }
+    .always-card { max-width: 660px; width: 100%; padding: 56px 48px; text-align: center; }
+    @media(max-width:580px){ .always-card { padding: 38px 26px; } }
+    .always-card .big-heart {
+      font-size: 5rem; display: inline-block;
+      animation: heartbeat 1.4s ease-in-out infinite;
+      margin-bottom: 22px;
+      filter: drop-shadow(0 4px 16px rgba(232,68,106,0.3));
+    }
+    .always-card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.7rem);
+      font-style: italic; color: var(--rose); margin-bottom: 22px;
+    }
+    .always-card .body-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.18rem; line-height: 1.85; color: #6a3a4a; margin-bottom: 32px;
+    }
+    .mood-q { font-size: 0.8rem; color: var(--muted); margin-bottom: 18px; letter-spacing: 0.05em; }
+    .mood-btns { display: flex; justify-content: center; gap: 32px; margin-bottom: 16px; }
+    .mood-btn {
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      cursor: pointer; transition: transform 0.25s; background: none; border: none;
+    }
+    .mood-btn:hover { transform: scale(1.2); }
+    .mood-btn .mf { font-size: 3rem; }
+    .mood-btn span { font-size: 0.7rem; color: var(--muted); font-family: 'DM Sans', sans-serif; }
+    #moodMessage {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 1.05rem; color: var(--rose);
+      min-height: 28px; transition: opacity 0.3s;
+    }
+
+    /* ===== HUG ===== */
+    .hug-section { padding: 80px 24px 100px; text-align: center; }
+    .hug-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-style: italic; color: var(--text); margin-bottom: 10px;
+    }
+    .hug-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 1.05rem; color: var(--muted); margin-bottom: 34px;
+    }
+    #hugMessage {
+      margin-top: 26px;
+      font-family: 'Playfair Display', serif;
+      font-style: italic; font-size: 1.35rem; color: var(--rose);
+      min-height: 34px; transition: opacity 0.3s;
+      max-width: 500px; margin-left: auto; margin-right: auto;
+    }
+
+    /* ===== FOOTER ===== */
+    footer { padding: 60px 24px; text-align: center; }
+    .footer-card { display: inline-block; padding: 30px 48px; max-width: 400px; width: 100%; }
+    .footer-card .f-title {
+      font-family: 'Playfair Display', serif;
+      font-style: italic; font-size: 1.85rem; color: var(--rose); margin-bottom: 8px;
+    }
+    .footer-card p { font-size: 0.82rem; color: var(--muted); margin-bottom: 4px; }
+    .footer-card .f-small { font-size: 0.7rem; color: #c9aab5; }
+
+    /* ===== MODAL ===== */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(30,8,16,0.5);
+      z-index: 9000; justify-content: center; align-items: center;
+      padding: 24px; backdrop-filter: blur(8px);
     }
     .modal-overlay.open { display: flex; }
     .modal-box {
-      background: #fff5f8;
-      border-radius: 24px;
-      padding: 36px;
-      max-width: 520px;
-      width: 100%;
-      position: relative;
-      box-shadow: 0 20px 60px rgba(255,78,139,0.25);
-      max-height: 85vh;
-      overflow-y: auto;
+      background: #fff8f9; border-radius: 28px; padding: 48px 44px;
+      max-width: 540px; width: 100%; position: relative;
+      box-shadow: 0 24px 80px rgba(232,68,106,0.22);
+      max-height: 88vh; overflow-y: auto;
     }
+    @media(max-width:560px){ .modal-box { padding: 36px 22px; } }
     .modal-close {
-      position: absolute;
-      top: 14px; right: 18px;
-      font-size: 1.6rem;
-      cursor: pointer;
-      color: #ff4e8b;
-      background: none;
-      border: none;
+      position: absolute; top: 16px; right: 18px;
+      font-size: 1.3rem; cursor: pointer; color: var(--rose);
+      background: none; border: none; width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 50%; transition: background 0.2s;
     }
-    /* Sparkle */
+    .modal-close:hover { background: var(--blush); }
+    .modal-box h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.9rem; font-style: italic;
+      color: var(--rose); text-align: center; margin-bottom: 28px;
+    }
+    .letter-body {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem; line-height: 1.9; color: #5a3040;
+    }
+    .letter-body p + p { margin-top: 16px; }
+    .letter-sign {
+      text-align: right;
+      font-family: 'Playfair Display', serif;
+      font-style: italic; font-size: 1.25rem;
+      color: var(--rose); margin-top: 22px;
+    }
+
+    /* Sparkle & Confetti */
     .sparkle {
-      position: fixed;
-      pointer-events: none;
-      font-size: 1.2rem;
-      z-index: 9999;
-      animation: sparkleAnim 0.8s ease-out forwards;
+      position: fixed; pointer-events: none; z-index: 9999;
+      animation: sparkleAnim 0.8s ease-out forwards; font-size: 0.95rem;
     }
     @keyframes sparkleAnim {
       0%   { opacity: 1; transform: translate(0,0) scale(1); }
-      100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0.2); }
+      100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0.1); }
     }
-    /* Confetti */
     .confetti-piece {
-      position: fixed;
-      width: 10px;
-      height: 10px;
-      border-radius: 2px;
-      pointer-events: none;
-      z-index: 9998;
-      animation: confettiFall 1.5s ease-out forwards;
+      position: fixed; border-radius: 2px; pointer-events: none; z-index: 9998;
+      animation: confettiFall 1.6s ease-out forwards;
     }
     @keyframes confettiFall {
       0%   { opacity: 1; transform: translateY(0) rotate(0deg); }
-      100% { opacity: 0; transform: translateY(300px) rotate(720deg); }
+      100% { opacity: 0; transform: translateY(280px) rotate(720deg); }
     }
-    /* Mood toggle */
-    .mood-face {
-      font-size: 4rem;
-      cursor: pointer;
-      transition: transform 0.3s;
-      display: inline-block;
-    }
-    .mood-face:hover { transform: scale(1.2); }
-    /* Section fade in */
-    .section-wrap {
-      position: relative;
-      z-index: 1;
-    }
+
+    /* Fade in on scroll */
+    .fade-in { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
     /* Scrollbar */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #ffe4f0; }
-    ::-webkit-scrollbar-thumb { background: #ff6b9d; border-radius: 10px; }
-    /* Pill badge */
-    .pill {
-      display: inline-block;
-      background: rgba(255,107,157,0.12);
-      border: 1px solid rgba(255,107,157,0.35);
-      color: #c2185b;
-      border-radius: 999px;
-      padding: 6px 16px;
-      font-size: 0.85rem;
-      margin: 4px;
-    }
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--blush2); }
+    ::-webkit-scrollbar-thumb { background: var(--rose-lt); border-radius: 10px; }
   </style>
 </head>
 <body>
-<!-- Floating hearts background -->
-<div class="hearts-container" id="heartsContainer"></div>
-<!-- HERO SECTION -->
-<section class="section-wrap min-h-screen flex flex-col items-center justify-center text-center px-6 py-16">
-  <p class="text-pink-400 font-semibold tracking-widest text-sm uppercase mb-3">💌 A message from my heart to yours</p>
-  <h1 class="dancing text-6xl md:text-7xl text-pink-600 mb-2">
-    Hey, Shattoh <span class="beat">💖</span>
-  </h1>
-  <p class="text-pink-400 text-lg md:text-xl mt-2 mb-6 font-light">I noticed you're not okay today... and it's breaking my heart.</p>
-  <div class="glass p-6 md:p-8 max-w-xl w-full mb-8">
-    <p class="text-gray-600 text-base leading-relaxed mb-4">
-      I don't know exactly what happened or what I did — but if <strong>anything I said, did, or didn't do</strong> is the reason you're hurting right now, I am truly, deeply sorry. 😔
-    </p>
-    <p class="text-gray-500 text-sm mb-4">Maybe it was one of these...</p>
-    <div class="flex flex-wrap justify-center gap-1">
+
+<div id="cursor"></div>
+<div id="cursor-trail"></div>
+<div class="petals-wrap" id="petalsWrap"></div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">💌 A message from my heart to yours</div>
+  <h1 class="hero-title">Hey, Shattoh <span class="hero-heart">💖</span></h1>
+  <p class="hero-sub">I noticed you're not okay today… and it's breaking my heart.</p>
+
+  <div class="glass-card hero-card fade-in">
+    <p>I don't know exactly what happened or what I did — but if <strong>anything I said, did, or didn't do</strong> is the reason you're hurting right now, I am truly, deeply sorry. 😔</p>
+    <p class="hint">Maybe it was one of these...</p>
+    <div class="pills-wrap">
       <span class="pill">Said something without thinking 😬</span>
       <span class="pill">Didn't give you enough attention 🥺</span>
       <span class="pill">Forgot something important 😓</span>
@@ -223,240 +501,252 @@
       <span class="pill">Hurt you unknowingly 🤍</span>
     </div>
   </div>
-  <button class="glow-btn" onclick="scrollToApology()">I'm So Sorry, Shattoh 🙏</button>
+
+  <button class="btn-primary" onclick="scrollToApology()">I'm So Sorry, Shattoh 🙏</button>
 </section>
-<!-- APOLOGY SECTION -->
-<section class="section-wrap px-6 py-16 max-w-4xl mx-auto" id="apologySection">
-  <h2 class="dancing text-5xl text-pink-600 text-center mb-3">My Heartfelt Apology 🌸</h2>
-  <p class="text-center text-pink-400 mb-10 text-sm">From the bottom of my heart, Shattoh...</p>
-  <div class="grid md:grid-cols-2 gap-6 mb-10">
-    <div class="glass p-6">
-      <div class="text-3xl mb-3">😔</div>
-      <h3 class="text-pink-600 font-semibold text-lg mb-2">I Am Sorry, Shattoh</h3>
-      <p class="text-gray-600 text-sm leading-relaxed">
-        Whatever I did — even if I don't fully understand it yet — I'm sorry. Your smile matters more to me than anything in this world, and knowing I might have taken it away hurts me deeply.
-      </p>
+
+<!-- APOLOGY -->
+<section class="apology-section" id="apologySection">
+  <div class="sec-header fade-in">
+    <p class="sec-label">From the bottom of my heart</p>
+    <h2 class="sec-title">My Heartfelt Apology 🌸</h2>
+    <p class="sec-sub">From the bottom of my heart, Shattoh...</p>
+  </div>
+  <div class="divider fade-in"><span>✦</span></div>
+
+  <div class="apology-grid">
+    <div class="apology-card fade-in">
+      <div class="icon">😔</div>
+      <h3>I Am Sorry, Shattoh</h3>
+      <p>Whatever I did — even if I don't fully understand it yet — I'm sorry. Your smile matters more to me than anything in this world, and knowing I might have taken it away hurts me deeply.</p>
     </div>
-    <div class="glass p-6">
-      <div class="text-3xl mb-3">🫂</div>
-      <h3 class="text-pink-600 font-semibold text-lg mb-2">I Never Want To Hurt You</h3>
-      <p class="text-gray-600 text-sm leading-relaxed">
-        Hurting you was never my intention, not even for a second. Sometimes I mess up, sometimes my words or actions fall short — but my love for you, Shattoh, never does.
-      </p>
+    <div class="apology-card fade-in">
+      <div class="icon">🫂</div>
+      <h3>I Never Want To Hurt You</h3>
+      <p>Hurting you was never my intention, not even for a second. Sometimes I mess up, sometimes my words or actions fall short — but my love for you, Shattoh, never does.</p>
     </div>
-    <div class="glass p-6">
-      <div class="text-3xl mb-3">💬</div>
-      <h3 class="text-pink-600 font-semibold text-lg mb-2">Tell Me What's Wrong</h3>
-      <p class="text-gray-600 text-sm leading-relaxed">
-        Please don't keep it inside. I want to understand you, Shattoh. I want to fix whatever is broken. I'm here — fully, completely — just tell me and I'll make it right.
-      </p>
+    <div class="apology-card fade-in">
+      <div class="icon">💬</div>
+      <h3>Tell Me What's Wrong</h3>
+      <p>Please don't keep it inside. I want to understand you, Shattoh. I want to fix whatever is broken. I'm here — fully, completely — just tell me and I'll make it right.</p>
     </div>
-    <div class="glass p-6">
-      <div class="text-3xl mb-3">🌹</div>
-      <h3 class="text-pink-600 font-semibold text-lg mb-2">You Deserve All The Good</h3>
-      <p class="text-gray-600 text-sm leading-relaxed">
-        You deserve all the happiness, love, and care in this world. And if I'm not giving you that fully, remind me — because you are my everything, Shattoh.
-      </p>
+    <div class="apology-card fade-in">
+      <div class="icon">🌹</div>
+      <h3>You Deserve All The Good</h3>
+      <p>You deserve all the happiness, love, and care in this world. And if I'm not giving you that fully, remind me — because you are my everything, Shattoh.</p>
     </div>
   </div>
-  <!-- Envelope -->
-  <div class="text-center">
-    <p class="text-pink-400 mb-3 text-sm">📮 Click the envelope to read my private letter to you...</p>
+
+  <div class="envelope-area fade-in">
+    <p class="envelope-hint">📮 Click the envelope to read my private letter to you...</p>
     <span class="envelope" onclick="openLetter()">💌</span>
   </div>
 </section>
-<!-- PROMISES SECTION -->
-<section class="section-wrap px-6 py-16 max-w-4xl mx-auto">
-  <h2 class="dancing text-5xl text-pink-600 text-center mb-3">My Promises To You, Shattoh 🤝</h2>
-  <p class="text-center text-pink-400 mb-10 text-sm">These are not just words — they are my commitments to you.</p>
-  <div class="grid md:grid-cols-2 gap-5">
-    <div class="promise-card">
-      <div class="text-2xl mb-2">👂</div>
-      <h4 class="text-pink-600 font-semibold mb-1">I promise to listen more</h4>
-      <p class="text-gray-500 text-sm">Every word you say matters. I'll listen — really listen — with my full heart and attention.</p>
-    </div>
-    <div class="promise-card">
-      <div class="text-2xl mb-2">🛡️</div>
-      <h4 class="text-pink-600 font-semibold mb-1">I promise to be your safe space</h4>
-      <p class="text-gray-500 text-sm">No matter what, you can always come to me. I'll be your calm in every storm, Shattoh.</p>
-    </div>
-    <div class="promise-card">
-      <div class="text-2xl mb-2">🧠</div>
-      <h4 class="text-pink-600 font-semibold mb-1">I promise to think before I speak</h4>
-      <p class="text-gray-500 text-sm">My words will be kinder, softer, and more thoughtful — because you deserve that, always.</p>
-    </div>
-    <div class="promise-card">
-      <div class="text-2xl mb-2">⏳</div>
-      <h4 class="text-pink-600 font-semibold mb-1">I promise to give you time</h4>
-      <p class="text-gray-500 text-sm">You are my priority. I'll make time for you — not leftover time, but the best of my time.</p>
-    </div>
-    <div class="promise-card">
-      <div class="text-2xl mb-2">🔄</div>
-      <h4 class="text-pink-600 font-semibold mb-1">I promise to grow every day</h4>
-      <p class="text-gray-500 text-sm">I'll keep becoming a better partner for you, Shattoh. I won't repeat my mistakes.</p>
-    </div>
-    <div class="promise-card">
-      <div class="text-2xl mb-2">💞</div>
-      <h4 class="text-pink-600 font-semibold mb-1">I promise to love you through everything</h4>
-      <p class="text-gray-500 text-sm">Good days, bad days, weird days — my love for you never takes a day off.</p>
-    </div>
+
+<!-- PROMISES -->
+<section class="promises-section">
+  <div class="sec-header fade-in">
+    <p class="sec-label">My commitments to you</p>
+    <h2 class="sec-title">My Promises To You, Shattoh 🤝</h2>
+    <p class="sec-sub">These are not just words — they are my commitments to you.</p>
   </div>
-</section>
-<!-- WHY I LOVE YOU SECTION -->
-<section class="section-wrap px-6 py-16 max-w-4xl mx-auto">
-  <h2 class="dancing text-5xl text-pink-600 text-center mb-3">Why I Love You, Shattoh 💕</h2>
-  <p class="text-center text-pink-400 mb-10 text-sm">Just a few of the million reasons...</p>
-  <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-    <div class="love-card">
-      <div class="text-3xl mb-2">😊</div>
-      <p class="text-pink-700 font-semibold text-sm">Your smile lights up my whole world</p>
-    </div>
-    <div class="love-card">
-      <div class="text-3xl mb-2">💪</div>
-      <p class="text-pink-700 font-semibold text-sm">How strong you are, even when you don't feel it</p>
-    </div>
-    <div class="love-card">
-      <div class="text-3xl mb-2">🌺</div>
-      <p class="text-pink-700 font-semibold text-sm">Your kind and beautiful heart</p>
-    </div>
-    <div class="love-card">
-      <div class="text-3xl mb-2">🤣</div>
-      <p class="text-pink-700 font-semibold text-sm">The way you make me laugh like no one else can</p>
-    </div>
-    <div class="love-card">
-      <div class="text-3xl mb-2">🧩</div>
-      <p class="text-pink-700 font-semibold text-sm">How you complete me in every way</p>
-    </div>
-    <div class="love-card">
-      <div class="text-3xl mb-2">🌙</div>
-      <p class="text-pink-700 font-semibold text-sm">You are my peace, my home, my everything</p>
-    </div>
-  </div>
-</section>
-<!-- ALWAYS WITH YOU SECTION -->
-<section class="section-wrap px-6 py-16 text-center">
-  <div class="glass max-w-2xl mx-auto p-10">
-    <div class="text-7xl beat mb-4">💗</div>
-    <h2 class="dancing text-5xl text-pink-600 mb-4">I Am Always With You, Shattoh</h2>
-    <p class="text-gray-600 leading-relaxed mb-6">
-      No matter what time it is, no matter what mood you're in, no matter what happens — <strong>I am right here.</strong><br/><br/>
-      You never have to face anything alone. When you cry, I want to hold you. When you're angry, I want to listen. When you're happy, I want to celebrate with you. When you're lost, I will find you.<br/><br/>
-      <span class="text-pink-500 font-semibold">Shattoh, you are my person. Always. 💖</span>
-    </p>
-    <p class="text-pink-400 text-sm mb-4">How are you feeling right now, Shattoh?</p>
-    <div class="flex justify-center gap-8 mb-6">
-      <div class="text-center">
-        <div class="mood-face" id="sadFace" onclick="setMood('sad')" title="Still sad">😔</div>
-        <p class="text-xs text-gray-400 mt-1">Still sad</p>
-      </div>
-      <div class="text-center">
-        <div class="mood-face" id="happyFace" onclick="setMood('happy')" title="A little better">😊</div>
-        <p class="text-xs text-gray-400 mt-1">A little better</p>
+  <div class="divider fade-in"><span>✦</span></div>
+
+  <div class="promises-grid">
+    <div class="promise-card fade-in">
+      <div class="promise-icon">👂</div>
+      <div class="promise-body">
+        <h4>I promise to listen more</h4>
+        <p>Every word you say matters. I'll listen — really listen — with my full heart and attention.</p>
       </div>
     </div>
-    <p id="moodMessage" class="text-pink-500 font-medium text-sm min-h-6"></p>
+    <div class="promise-card fade-in">
+      <div class="promise-icon">🛡️</div>
+      <div class="promise-body">
+        <h4>I promise to be your safe space</h4>
+        <p>No matter what, you can always come to me. I'll be your calm in every storm, Shattoh.</p>
+      </div>
+    </div>
+    <div class="promise-card fade-in">
+      <div class="promise-icon">🧠</div>
+      <div class="promise-body">
+        <h4>I promise to think before I speak</h4>
+        <p>My words will be kinder, softer, and more thoughtful — because you deserve that, always.</p>
+      </div>
+    </div>
+    <div class="promise-card fade-in">
+      <div class="promise-icon">⏳</div>
+      <div class="promise-body">
+        <h4>I promise to give you time</h4>
+        <p>You are my priority. I'll make time for you — not leftover time, but the best of my time.</p>
+      </div>
+    </div>
+    <div class="promise-card fade-in">
+      <div class="promise-icon">🔄</div>
+      <div class="promise-body">
+        <h4>I promise to grow every day</h4>
+        <p>I'll keep becoming a better partner for you, Shattoh. I won't repeat my mistakes.</p>
+      </div>
+    </div>
+    <div class="promise-card fade-in">
+      <div class="promise-icon">💞</div>
+      <div class="promise-body">
+        <h4>I promise to love you through everything</h4>
+        <p>Good days, bad days, weird days — my love for you never takes a day off.</p>
+      </div>
+    </div>
   </div>
 </section>
-<!-- HUG SECTION -->
-<section class="section-wrap px-6 py-16 text-center">
-  <h2 class="dancing text-4xl text-pink-600 mb-4">A Virtual Hug For You 🤗</h2>
-  <p class="text-pink-400 text-sm mb-8">Tap the button to receive a hug from me, Shattoh!</p>
-  <button class="glow-btn text-2xl px-10 py-5" onclick="sendHug()">🤗 Hug Me!</button>
-  <p id="hugMessage" class="mt-6 text-pink-600 dancing text-2xl min-h-8 transition-all duration-300"></p>
+
+<!-- WHY I LOVE YOU -->
+<section class="love-section">
+  <div class="sec-header fade-in">
+    <p class="sec-label">Just a few of the million reasons</p>
+    <h2 class="sec-title">Why I Love You, Shattoh 💕</h2>
+    <p class="sec-sub">Just a few of the million reasons...</p>
+  </div>
+  <div class="divider fade-in"><span>✦</span></div>
+
+  <div class="love-grid">
+    <div class="love-card fade-in"><div class="lc-icon">😊</div><p>Your smile lights up my whole world</p></div>
+    <div class="love-card fade-in"><div class="lc-icon">💪</div><p>How strong you are, even when you don't feel it</p></div>
+    <div class="love-card fade-in"><div class="lc-icon">🌺</div><p>Your kind and beautiful heart</p></div>
+    <div class="love-card fade-in"><div class="lc-icon">🤣</div><p>The way you make me laugh like no one else can</p></div>
+    <div class="love-card fade-in"><div class="lc-icon">🧩</div><p>How you complete me in every way</p></div>
+    <div class="love-card fade-in"><div class="lc-icon">🌙</div><p>You are my peace, my home, my everything</p></div>
+  </div>
 </section>
+
+<!-- ALWAYS WITH YOU -->
+<section class="always-section">
+  <div class="glass-card always-card fade-in">
+    <div class="big-heart">💗</div>
+    <h2>I Am Always With You, Shattoh</h2>
+    <div class="body-text">
+      <p>No matter what time it is, no matter what mood you're in, no matter what happens — <strong>I am right here.</strong></p><br>
+      <p>You never have to face anything alone. When you cry, I want to hold you. When you're angry, I want to listen. When you're happy, I want to celebrate with you. When you're lost, I will find you.</p><br>
+      <p style="color:var(--rose);font-weight:600;">Shattoh, you are my person. Always. 💖</p>
+    </div>
+    <p class="mood-q">How are you feeling right now, Shattoh?</p>
+    <div class="mood-btns">
+      <button class="mood-btn" onclick="setMood('sad')">
+        <span class="mf">😔</span><span>Still sad</span>
+      </button>
+      <button class="mood-btn" onclick="setMood('happy')">
+        <span class="mf">😊</span><span>A little better</span>
+      </button>
+    </div>
+    <p id="moodMessage"></p>
+  </div>
+</section>
+
+<!-- HUG -->
+<section class="hug-section">
+  <h2 class="fade-in">A Virtual Hug For You 🤗</h2>
+  <p class="hug-sub fade-in">Tap the button to receive a hug from me, Shattoh!</p>
+  <button class="btn-primary fade-in" style="font-size:1.05rem;padding:17px 50px;" onclick="sendHug()">🤗 Hug Me!</button>
+  <p id="hugMessage"></p>
+</section>
+
 <!-- FOOTER -->
-<footer class="section-wrap text-center py-10 px-6">
-  <div class="glass inline-block px-8 py-5 max-w-md mx-auto">
-    <p class="dancing text-3xl text-pink-500 mb-2">With all my love,</p>
-    <p class="text-gray-500 text-sm">Made just for you, Shattoh 💖</p>
-    <p class="text-pink-300 text-xs mt-2">Every pixel of this page is a piece of my heart 🌸</p>
+<footer>
+  <div class="glass-card footer-card fade-in">
+    <p class="f-title">With all my love,</p>
+    <p>Made just for you, Shattoh 💖</p>
+    <p class="f-small">Every pixel of this page is a piece of my heart 🌸</p>
   </div>
 </footer>
+
 <!-- LETTER MODAL -->
 <div class="modal-overlay" id="letterModal">
   <div class="modal-box">
     <button class="modal-close" onclick="closeLetter()">✕</button>
-    <h3 class="dancing text-4xl text-pink-600 mb-4 text-center">My Letter To You 💌</h3>
-    <div class="text-gray-600 text-sm leading-relaxed space-y-4">
+    <h3>My Letter To You 💌</h3>
+    <div class="letter-body">
       <p>My dearest Shattoh,</p>
-      <p>
-        I'm writing this because I don't want you to ever doubt for even one second how much you mean to me. You are not just my girlfriend — you are my best friend, my peace, my reason to smile every single day.
-      </p>
-      <p>
-        If I did something that hurt you — whether I know about it or not — I want you to know that I am deeply, genuinely sorry. You deserve someone who handles your heart with the utmost care, and if I've been careless, I'm going to fix that.
-      </p>
-      <p>
-        Sometimes I mess up. I say the wrong things, I don't respond the way I should, I get too busy and forget to check in. But none of that means I love you any less. It just means I'm human, and I'm learning — learning how to love you the way you deserve.
-      </p>
-      <p>
-        Please don't bottle things up inside. Talk to me. Shout at me if you want. I'd rather have that than silence between us. Because you matter more to me than my ego, my comfort, or anything else.
-      </p>
-      <p>
-        I love you, Shattoh. Today, tomorrow, always. No matter what. 💖
-      </p>
-      <p class="dancing text-2xl text-pink-500 text-right">— Yours, always 🌹</p>
+      <p>I'm writing this because I don't want you to ever doubt for even one second how much you mean to me. You are not just my girlfriend — you are my best friend, my peace, my reason to smile every single day.</p>
+      <p>If I did something that hurt you — whether I know about it or not — I want you to know that I am deeply, genuinely sorry. You deserve someone who handles your heart with the utmost care, and if I've been careless, I'm going to fix that.</p>
+      <p>Sometimes I mess up. I say the wrong things, I don't respond the way I should, I get too busy and forget to check in. But none of that means I love you any less. It just means I'm human, and I'm learning — learning how to love you the way you deserve.</p>
+      <p>Please don't bottle things up inside. Talk to me. Shout at me if you want. I'd rather have that than silence between us. Because you matter more to me than my ego, my comfort, or anything else.</p>
+      <p>I love you, Shattoh. Today, tomorrow, always. No matter what. 💖</p>
+      <p class="letter-sign">— Yours, always 🌹</p>
     </div>
   </div>
 </div>
+
 <script>
-  // ---- Floating Hearts ----
-  const heartEmojis = ['💖','💗','💕','💓','🌸','✨','💝','🌹','💞'];
-  function createHeart() {
-    const container = document.getElementById('heartsContainer');
-    const heart = document.createElement('div');
-    heart.classList.add('floating-heart');
-    heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
-    heart.style.left = Math.random() * 100 + 'vw';
-    heart.style.fontSize = (Math.random() * 1.2 + 0.8) + 'rem';
-    const dur = Math.random() * 8 + 7;
-    heart.style.animationDuration = dur + 's';
-    heart.style.animationDelay = Math.random() * 5 + 's';
-    container.appendChild(heart);
-    setTimeout(() => heart.remove(), (dur + 5) * 1000);
+  // Custom Cursor
+  const cur = document.getElementById('cursor');
+  const trail = document.getElementById('cursor-trail');
+  document.addEventListener('mousemove', e => {
+    cur.style.left = e.clientX + 'px';
+    cur.style.top  = e.clientY + 'px';
+    setTimeout(() => {
+      trail.style.left = e.clientX + 'px';
+      trail.style.top  = e.clientY + 'px';
+    }, 90);
+  });
+
+  // Floating Petals
+  const petalEmojis = ['🌸','💖','💗','💕','✨','🌹','💝','💞','🌺'];
+  function createPetal() {
+    const wrap = document.getElementById('petalsWrap');
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.textContent = petalEmojis[Math.floor(Math.random() * petalEmojis.length)];
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.fontSize = (Math.random() * 0.8 + 0.6) + 'rem';
+    const dur = Math.random() * 12 + 10;
+    p.style.animationDuration = dur + 's';
+    p.style.animationDelay = Math.random() * 4 + 's';
+    wrap.appendChild(p);
+    setTimeout(() => p.remove(), (dur + 5) * 1000);
   }
-  setInterval(createHeart, 600);
-  for (let i = 0; i < 12; i++) setTimeout(createHeart, i * 300);
-  // ---- Sparkle on click ----
-  document.addEventListener('click', function(e) {
-    const sparks = ['✨','💫','⭐','🌟','💖'];
-    for (let i = 0; i < 6; i++) {
+  setInterval(createPetal, 800);
+  for (let i = 0; i < 14; i++) setTimeout(createPetal, i * 400);
+
+  // Sparkles on click
+  document.addEventListener('click', e => {
+    const sparks = ['✨','💫','⭐','🌟','💖','🌸'];
+    for (let i = 0; i < 7; i++) {
       const el = document.createElement('div');
-      el.classList.add('sparkle');
+      el.className = 'sparkle';
       el.textContent = sparks[Math.floor(Math.random() * sparks.length)];
       el.style.left = e.clientX + 'px';
       el.style.top  = e.clientY + 'px';
-      const tx = (Math.random() - 0.5) * 120;
-      const ty = (Math.random() - 0.5) * 120;
+      const tx = (Math.random() - 0.5) * 130;
+      const ty = (Math.random() - 0.5) * 130;
       el.style.setProperty('--tx', tx + 'px');
       el.style.setProperty('--ty', ty + 'px');
-      el.style.animationDuration = (Math.random() * 0.4 + 0.6) + 's';
+      el.style.animationDuration = (Math.random() * 0.4 + 0.5) + 's';
       document.body.appendChild(el);
-      setTimeout(() => el.remove(), 1000);
+      setTimeout(() => el.remove(), 900);
     }
   });
-  // ---- Confetti ----
+
+  // Confetti
   function launchConfetti(x, y) {
-    const colors = ['#ff6b9d','#ffb3d1','#ff4e8b','#ffd6e7','#ff85b3','#c2185b','#fce4ec'];
-    for (let i = 0; i < 40; i++) {
-      const piece = document.createElement('div');
-      piece.classList.add('confetti-piece');
-      piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-      piece.style.left = (x || window.innerWidth/2) + (Math.random()-0.5)*100 + 'px';
-      piece.style.top  = (y || window.innerHeight/2) + 'px';
-      piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-      const tx = (Math.random()-0.5)*300;
-      piece.style.setProperty('--tx', tx+'px');
-      piece.style.animationDuration = (Math.random()*1 + 1) + 's';
-      document.body.appendChild(piece);
-      setTimeout(() => piece.remove(), 2500);
+    const colors = ['#e8446a','#ffb3d1','#ff4e8b','#ffd6e7','#ff85b3','#c2185b','#fce4ec','#fff'];
+    for (let i = 0; i < 50; i++) {
+      const p = document.createElement('div');
+      p.className = 'confetti-piece';
+      p.style.background = colors[Math.floor(Math.random() * colors.length)];
+      p.style.left = (x || window.innerWidth/2) + (Math.random()-0.5)*120 + 'px';
+      p.style.top  = (y || window.innerHeight/2) + 'px';
+      p.style.borderRadius = Math.random() > 0.5 ? '50%' : '3px';
+      p.style.width  = (Math.random()*6+4) + 'px';
+      p.style.height = (Math.random()*6+4) + 'px';
+      p.style.animationDuration = (Math.random()*1+1) + 's';
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 2600);
     }
   }
-  // ---- Scroll to apology ----
+
   function scrollToApology() {
     document.getElementById('apologySection').scrollIntoView({ behavior: 'smooth' });
     launchConfetti();
   }
-  // ---- Letter modal ----
+
   function openLetter() {
     document.getElementById('letterModal').classList.add('open');
     launchConfetti();
@@ -464,20 +754,22 @@
   function closeLetter() {
     document.getElementById('letterModal').classList.remove('open');
   }
-  document.getElementById('letterModal').addEventListener('click', function(e) {
-    if (e.target === this) closeLetter();
+  document.getElementById('letterModal').addEventListener('click', e => {
+    if (e.target === document.getElementById('letterModal')) closeLetter();
   });
-  // ---- Mood toggle ----
+
   function setMood(mood) {
     const msg = document.getElementById('moodMessage');
-    if (mood === 'happy') {
-      msg.textContent = '😊 Yay! That makes me SO happy, Shattoh! My world lights up when you smile! 💖';
-      launchConfetti();
-    } else {
-      msg.textContent = '🫂 It\'s okay, Shattoh. I\'m right here. Take your time. I\'m not going anywhere. 💗';
-    }
+    msg.style.opacity = '0';
+    setTimeout(() => {
+      msg.textContent = mood === 'happy'
+        ? '😊 Yay! That makes me SO happy, Shattoh! My world lights up when you smile! 💖'
+        : '🫂 It\'s okay, Shattoh. I\'m right here. Take your time. I\'m not going anywhere. 💗';
+      msg.style.opacity = '1';
+      if (mood === 'happy') launchConfetti();
+    }, 200);
   }
-  // ---- Virtual Hug ----
+
   const hugMessages = [
     'Wrapping you in the warmest, tightest hug ever, Shattoh! 🤗💖',
     'I\'m squeezing you so tight right now, never letting go! 💕',
@@ -497,6 +789,17 @@
       launchConfetti();
     }, 200);
   }
+
+  // Scroll fade-in
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 70);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 </script>
 </body>
 </html>
