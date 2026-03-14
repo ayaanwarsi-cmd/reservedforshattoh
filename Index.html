@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>For My Shattoh 💖</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #ffe4f0, #fff0f6, #fce4ec, #ffd6e7);
+      background-size: 400% 400%;
+      animation: bgShift 8s ease infinite;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    @keyframes bgShift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .dancing { font-family: 'Dancing Script', cursive; }
+    /* Floating hearts */
+    .hearts-container {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .floating-heart {
+      position: absolute;
+      bottom: -60px;
+      font-size: 1.5rem;
+      animation: floatUp linear infinite;
+      opacity: 0.6;
+    }
+    @keyframes floatUp {
+      0%   { transform: translateY(0) rotate(0deg); opacity: 0.6; }
+      100% { transform: translateY(-110vh) rotate(30deg); opacity: 0; }
+    }
+    /* Beating heart */
+    .beat {
+      animation: beat 1.2s ease-in-out infinite;
+      display: inline-block;
+    }
+    @keyframes beat {
+      0%, 100% { transform: scale(1); }
+      25%       { transform: scale(1.15); }
+      50%       { transform: scale(1); }
+      75%       { transform: scale(1.1); }
+    }
+    /* Glass card */
+    .glass {
+      background: rgba(255, 255, 255, 0.55);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1.5px solid rgba(255, 182, 193, 0.4);
+      border-radius: 24px;
+      box-shadow: 0 8px 32px rgba(255, 105, 135, 0.12);
+    }
+    /* Glow button */
+    .glow-btn {
+      background: linear-gradient(135deg, #ff6b9d, #ff4e8b);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 14px 36px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(255, 78, 139, 0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+      font-family: 'Poppins', sans-serif;
+    }
+    .glow-btn:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 8px 30px rgba(255, 78, 139, 0.55);
+    }
+    .glow-btn:active { transform: scale(0.97); }
+    /* Promise card */
+    .promise-card {
+      background: rgba(255,255,255,0.6);
+      border-radius: 18px;
+      padding: 20px;
+      border-left: 4px solid #ff6b9d;
+      box-shadow: 0 4px 15px rgba(255,107,157,0.1);
+      transition: transform 0.2s;
+    }
+    .promise-card:hover { transform: translateY(-4px); }
+    /* Love reason card */
+    .love-card {
+      background: linear-gradient(135deg, rgba(255,192,203,0.4), rgba(255,240,246,0.7));
+      border-radius: 18px;
+      padding: 20px;
+      text-align: center;
+      border: 1px solid rgba(255,182,193,0.5);
+      transition: transform 0.25s;
+    }
+    .love-card:hover { transform: scale(1.05); }
+    /* Envelope */
+    .envelope {
+      font-size: 5rem;
+      cursor: pointer;
+      transition: transform 0.3s;
+      display: inline-block;
+    }
+    .envelope:hover { transform: scale(1.2) rotate(-5deg); }
+    /* Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 999;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: #fff5f8;
+      border-radius: 24px;
+      padding: 36px;
+      max-width: 520px;
+      width: 100%;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(255,78,139,0.25);
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+    .modal-close {
+      position: absolute;
+      top: 14px; right: 18px;
+      font-size: 1.6rem;
+      cursor: pointer;
+      color: #ff4e8b;
+      background: none;
+      border: none;
+    }
+    /* Sparkle */
+    .sparkle {
+      position: fixed;
+      pointer-events: none;
+      font-size: 1.2rem;
+      z-index: 9999;
+      animation: sparkleAnim 0.8s ease-out forwards;
+    }
+    @keyframes sparkleAnim {
+      0%   { opacity: 1; transform: translate(0,0) scale(1); }
+      100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0.2); }
+    }
+    /* Confetti */
+    .confetti-piece {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      pointer-events: none;
+      z-index: 9998;
+      animation: confettiFall 1.5s ease-out forwards;
+    }
+    @keyframes confettiFall {
+      0%   { opacity: 1; transform: translateY(0) rotate(0deg); }
+      100% { opacity: 0; transform: translateY(300px) rotate(720deg); }
+    }
+    /* Mood toggle */
+    .mood-face {
+      font-size: 4rem;
+      cursor: pointer;
+      transition: transform 0.3s;
+      display: inline-block;
+    }
+    .mood-face:hover { transform: scale(1.2); }
+    /* Section fade in */
+    .section-wrap {
+      position: relative;
+      z-index: 1;
+    }
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #ffe4f0; }
+    ::-webkit-scrollbar-thumb { background: #ff6b9d; border-radius: 10px; }
+    /* Pill badge */
+    .pill {
+      display: inline-block;
+      background: rgba(255,107,157,0.12);
+      border: 1px solid rgba(255,107,157,0.35);
+      color: #c2185b;
+      border-radius: 999px;
+      padding: 6px 16px;
+      font-size: 0.85rem;
+      margin: 4px;
+    }
+  </style>
+</head>
+<body>
+<!-- Floating hearts background -->
+<div class="hearts-container" id="heartsContainer"></div>
+<!-- HERO SECTION -->
+<section class="section-wrap min-h-screen flex flex-col items-center justify-center text-center px-6 py-16">
+  <p class="text-pink-400 font-semibold tracking-widest text-sm uppercase mb-3">💌 A message from my heart to yours</p>
+  <h1 class="dancing text-6xl md:text-7xl text-pink-600 mb-2">
+    Hey, Shattoh <span class="beat">💖</span>
+  </h1>
+  <p class="text-pink-400 text-lg md:text-xl mt-2 mb-6 font-light">I noticed you're not okay today... and it's breaking my heart.</p>
+  <div class="glass p-6 md:p-8 max-w-xl w-full mb-8">
+    <p class="text-gray-600 text-base leading-relaxed mb-4">
+      I don't know exactly what happened or what I did — but if <strong>anything I said, did, or didn't do</strong> is the reason you're hurting right now, I am truly, deeply sorry. 😔
+    </p>
+    <p class="text-gray-500 text-sm mb-4">Maybe it was one of these...</p>
+    <div class="flex flex-wrap justify-center gap-1">
+      <span class="pill">Said something without thinking 😬</span>
+      <span class="pill">Didn't give you enough attention 🥺</span>
+      <span class="pill">Forgot something important 😓</span>
+      <span class="pill">Was careless with your feelings 💔</span>
+      <span class="pill">Didn't listen properly 👂</span>
+      <span class="pill">Made you feel unimportant 😞</span>
+      <span class="pill">Was too busy 📵</span>
+      <span class="pill">Hurt you unknowingly 🤍</span>
+    </div>
+  </div>
+  <button class="glow-btn" onclick="scrollToApology()">I'm So Sorry, Shattoh 🙏</button>
+</section>
+<!-- APOLOGY SECTION -->
+<section class="section-wrap px-6 py-16 max-w-4xl mx-auto" id="apologySection">
+  <h2 class="dancing text-5xl text-pink-600 text-center mb-3">My Heartfelt Apology 🌸</h2>
+  <p class="text-center text-pink-400 mb-10 text-sm">From the bottom of my heart, Shattoh...</p>
+  <div class="grid md:grid-cols-2 gap-6 mb-10">
+    <div class="glass p-6">
+      <div class="text-3xl mb-3">😔</div>
+      <h3 class="text-pink-600 font-semibold text-lg mb-2">I Am Sorry, Shattoh</h3>
+      <p class="text-gray-600 text-sm leading-relaxed">
+        Whatever I did — even if I don't fully understand it yet — I'm sorry. Your smile matters more to me than anything in this world, and knowing I might have taken it away hurts me deeply.
+      </p>
+    </div>
+    <div class="glass p-6">
+      <div class="text-3xl mb-3">🫂</div>
+      <h3 class="text-pink-600 font-semibold text-lg mb-2">I Never Want To Hurt You</h3>
+      <p class="text-gray-600 text-sm leading-relaxed">
+        Hurting you was never my intention, not even for a second. Sometimes I mess up, sometimes my words or actions fall short — but my love for you, Shattoh, never does.
+      </p>
+    </div>
+    <div class="glass p-6">
+      <div class="text-3xl mb-3">💬</div>
+      <h3 class="text-pink-600 font-semibold text-lg mb-2">Tell Me What's Wrong</h3>
+      <p class="text-gray-600 text-sm leading-relaxed">
+        Please don't keep it inside. I want to understand you, Shattoh. I want to fix whatever is broken. I'm here — fully, completely — just tell me and I'll make it right.
+      </p>
+    </div>
+    <div class="glass p-6">
+      <div class="text-3xl mb-3">🌹</div>
+      <h3 class="text-pink-600 font-semibold text-lg mb-2">You Deserve All The Good</h3>
+      <p class="text-gray-600 text-sm leading-relaxed">
+        You deserve all the happiness, love, and care in this world. And if I'm not giving you that fully, remind me — because you are my everything, Shattoh.
+      </p>
+    </div>
+  </div>
+  <!-- Envelope -->
+  <div class="text-center">
+    <p class="text-pink-400 mb-3 text-sm">📮 Click the envelope to read my private letter to you...</p>
+    <span class="envelope" onclick="openLetter()">💌</span>
+  </div>
+</section>
+<!-- PROMISES SECTION -->
+<section class="section-wrap px-6 py-16 max-w-4xl mx-auto">
+  <h2 class="dancing text-5xl text-pink-600 text-center mb-3">My Promises To You, Shattoh 🤝</h2>
+  <p class="text-center text-pink-400 mb-10 text-sm">These are not just words — they are my commitments to you.</p>
+  <div class="grid md:grid-cols-2 gap-5">
+    <div class="promise-card">
+      <div class="text-2xl mb-2">👂</div>
+      <h4 class="text-pink-600 font-semibold mb-1">I promise to listen more</h4>
+      <p class="text-gray-500 text-sm">Every word you say matters. I'll listen — really listen — with my full heart and attention.</p>
+    </div>
+    <div class="promise-card">
+      <div class="text-2xl mb-2">🛡️</div>
+      <h4 class="text-pink-600 font-semibold mb-1">I promise to be your safe space</h4>
+      <p class="text-gray-500 text-sm">No matter what, you can always come to me. I'll be your calm in every storm, Shattoh.</p>
+    </div>
+    <div class="promise-card">
+      <div class="text-2xl mb-2">🧠</div>
+      <h4 class="text-pink-600 font-semibold mb-1">I promise to think before I speak</h4>
+      <p class="text-gray-500 text-sm">My words will be kinder, softer, and more thoughtful — because you deserve that, always.</p>
+    </div>
+    <div class="promise-card">
+      <div class="text-2xl mb-2">⏳</div>
+      <h4 class="text-pink-600 font-semibold mb-1">I promise to give you time</h4>
+      <p class="text-gray-500 text-sm">You are my priority. I'll make time for you — not leftover time, but the best of my time.</p>
+    </div>
+    <div class="promise-card">
+      <div class="text-2xl mb-2">🔄</div>
+      <h4 class="text-pink-600 font-semibold mb-1">I promise to grow every day</h4>
+      <p class="text-gray-500 text-sm">I'll keep becoming a better partner for you, Shattoh. I won't repeat my mistakes.</p>
+    </div>
+    <div class="promise-card">
+      <div class="text-2xl mb-2">💞</div>
+      <h4 class="text-pink-600 font-semibold mb-1">I promise to love you through everything</h4>
+      <p class="text-gray-500 text-sm">Good days, bad days, weird days — my love for you never takes a day off.</p>
+    </div>
+  </div>
+</section>
+<!-- WHY I LOVE YOU SECTION -->
+<section class="section-wrap px-6 py-16 max-w-4xl mx-auto">
+  <h2 class="dancing text-5xl text-pink-600 text-center mb-3">Why I Love You, Shattoh 💕</h2>
+  <p class="text-center text-pink-400 mb-10 text-sm">Just a few of the million reasons...</p>
+  <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+    <div class="love-card">
+      <div class="text-3xl mb-2">😊</div>
+      <p class="text-pink-700 font-semibold text-sm">Your smile lights up my whole world</p>
+    </div>
+    <div class="love-card">
+      <div class="text-3xl mb-2">💪</div>
+      <p class="text-pink-700 font-semibold text-sm">How strong you are, even when you don't feel it</p>
+    </div>
+    <div class="love-card">
+      <div class="text-3xl mb-2">🌺</div>
+      <p class="text-pink-700 font-semibold text-sm">Your kind and beautiful heart</p>
+    </div>
+    <div class="love-card">
+      <div class="text-3xl mb-2">🤣</div>
+      <p class="text-pink-700 font-semibold text-sm">The way you make me laugh like no one else can</p>
+    </div>
+    <div class="love-card">
+      <div class="text-3xl mb-2">🧩</div>
+      <p class="text-pink-700 font-semibold text-sm">How you complete me in every way</p>
+    </div>
+    <div class="love-card">
+      <div class="text-3xl mb-2">🌙</div>
+      <p class="text-pink-700 font-semibold text-sm">You are my peace, my home, my everything</p>
+    </div>
+  </div>
+</section>
+<!-- ALWAYS WITH YOU SECTION -->
+<section class="section-wrap px-6 py-16 text-center">
+  <div class="glass max-w-2xl mx-auto p-10">
+    <div class="text-7xl beat mb-4">💗</div>
+    <h2 class="dancing text-5xl text-pink-600 mb-4">I Am Always With You, Shattoh</h2>
+    <p class="text-gray-600 leading-relaxed mb-6">
+      No matter what time it is, no matter what mood you're in, no matter what happens — <strong>I am right here.</strong><br/><br/>
+      You never have to face anything alone. When you cry, I want to hold you. When you're angry, I want to listen. When you're happy, I want to celebrate with you. When you're lost, I will find you.<br/><br/>
+      <span class="text-pink-500 font-semibold">Shattoh, you are my person. Always. 💖</span>
+    </p>
+    <p class="text-pink-400 text-sm mb-4">How are you feeling right now, Shattoh?</p>
+    <div class="flex justify-center gap-8 mb-6">
+      <div class="text-center">
+        <div class="mood-face" id="sadFace" onclick="setMood('sad')" title="Still sad">😔</div>
+        <p class="text-xs text-gray-400 mt-1">Still sad</p>
+      </div>
+      <div class="text-center">
+        <div class="mood-face" id="happyFace" onclick="setMood('happy')" title="A little better">😊</div>
+        <p class="text-xs text-gray-400 mt-1">A little better</p>
+      </div>
+    </div>
+    <p id="moodMessage" class="text-pink-500 font-medium text-sm min-h-6"></p>
+  </div>
+</section>
+<!-- HUG SECTION -->
+<section class="section-wrap px-6 py-16 text-center">
+  <h2 class="dancing text-4xl text-pink-600 mb-4">A Virtual Hug For You 🤗</h2>
+  <p class="text-pink-400 text-sm mb-8">Tap the button to receive a hug from me, Shattoh!</p>
+  <button class="glow-btn text-2xl px-10 py-5" onclick="sendHug()">🤗 Hug Me!</button>
+  <p id="hugMessage" class="mt-6 text-pink-600 dancing text-2xl min-h-8 transition-all duration-300"></p>
+</section>
+<!-- FOOTER -->
+<footer class="section-wrap text-center py-10 px-6">
+  <div class="glass inline-block px-8 py-5 max-w-md mx-auto">
+    <p class="dancing text-3xl text-pink-500 mb-2">With all my love,</p>
+    <p class="text-gray-500 text-sm">Made just for you, Shattoh 💖</p>
+    <p class="text-pink-300 text-xs mt-2">Every pixel of this page is a piece of my heart 🌸</p>
+  </div>
+</footer>
+<!-- LETTER MODAL -->
+<div class="modal-overlay" id="letterModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeLetter()">✕</button>
+    <h3 class="dancing text-4xl text-pink-600 mb-4 text-center">My Letter To You 💌</h3>
+    <div class="text-gray-600 text-sm leading-relaxed space-y-4">
+      <p>My dearest Shattoh,</p>
+      <p>
+        I'm writing this because I don't want you to ever doubt for even one second how much you mean to me. You are not just my girlfriend — you are my best friend, my peace, my reason to smile every single day.
+      </p>
+      <p>
+        If I did something that hurt you — whether I know about it or not — I want you to know that I am deeply, genuinely sorry. You deserve someone who handles your heart with the utmost care, and if I've been careless, I'm going to fix that.
+      </p>
+      <p>
+        Sometimes I mess up. I say the wrong things, I don't respond the way I should, I get too busy and forget to check in. But none of that means I love you any less. It just means I'm human, and I'm learning — learning how to love you the way you deserve.
+      </p>
+      <p>
+        Please don't bottle things up inside. Talk to me. Shout at me if you want. I'd rather have that than silence between us. Because you matter more to me than my ego, my comfort, or anything else.
+      </p>
+      <p>
+        I love you, Shattoh. Today, tomorrow, always. No matter what. 💖
+      </p>
+      <p class="dancing text-2xl text-pink-500 text-right">— Yours, always 🌹</p>
+    </div>
+  </div>
+</div>
+<script>
+  // ---- Floating Hearts ----
+  const heartEmojis = ['💖','💗','💕','💓','🌸','✨','💝','🌹','💞'];
+  function createHeart() {
+    const container = document.getElementById('heartsContainer');
+    const heart = document.createElement('div');
+    heart.classList.add('floating-heart');
+    heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+    heart.style.left = Math.random() * 100 + 'vw';
+    heart.style.fontSize = (Math.random() * 1.2 + 0.8) + 'rem';
+    const dur = Math.random() * 8 + 7;
+    heart.style.animationDuration = dur + 's';
+    heart.style.animationDelay = Math.random() * 5 + 's';
+    container.appendChild(heart);
+    setTimeout(() => heart.remove(), (dur + 5) * 1000);
+  }
+  setInterval(createHeart, 600);
+  for (let i = 0; i < 12; i++) setTimeout(createHeart, i * 300);
+  // ---- Sparkle on click ----
+  document.addEventListener('click', function(e) {
+    const sparks = ['✨','💫','⭐','🌟','💖'];
+    for (let i = 0; i < 6; i++) {
+      const el = document.createElement('div');
+      el.classList.add('sparkle');
+      el.textContent = sparks[Math.floor(Math.random() * sparks.length)];
+      el.style.left = e.clientX + 'px';
+      el.style.top  = e.clientY + 'px';
+      const tx = (Math.random() - 0.5) * 120;
+      const ty = (Math.random() - 0.5) * 120;
+      el.style.setProperty('--tx', tx + 'px');
+      el.style.setProperty('--ty', ty + 'px');
+      el.style.animationDuration = (Math.random() * 0.4 + 0.6) + 's';
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 1000);
+    }
+  });
+  // ---- Confetti ----
+  function launchConfetti(x, y) {
+    const colors = ['#ff6b9d','#ffb3d1','#ff4e8b','#ffd6e7','#ff85b3','#c2185b','#fce4ec'];
+    for (let i = 0; i < 40; i++) {
+      const piece = document.createElement('div');
+      piece.classList.add('confetti-piece');
+      piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+      piece.style.left = (x || window.innerWidth/2) + (Math.random()-0.5)*100 + 'px';
+      piece.style.top  = (y || window.innerHeight/2) + 'px';
+      piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      const tx = (Math.random()-0.5)*300;
+      piece.style.setProperty('--tx', tx+'px');
+      piece.style.animationDuration = (Math.random()*1 + 1) + 's';
+      document.body.appendChild(piece);
+      setTimeout(() => piece.remove(), 2500);
+    }
+  }
+  // ---- Scroll to apology ----
+  function scrollToApology() {
+    document.getElementById('apologySection').scrollIntoView({ behavior: 'smooth' });
+    launchConfetti();
+  }
+  // ---- Letter modal ----
+  function openLetter() {
+    document.getElementById('letterModal').classList.add('open');
+    launchConfetti();
+  }
+  function closeLetter() {
+    document.getElementById('letterModal').classList.remove('open');
+  }
+  document.getElementById('letterModal').addEventListener('click', function(e) {
+    if (e.target === this) closeLetter();
+  });
+  // ---- Mood toggle ----
+  function setMood(mood) {
+    const msg = document.getElementById('moodMessage');
+    if (mood === 'happy') {
+      msg.textContent = '😊 Yay! That makes me SO happy, Shattoh! My world lights up when you smile! 💖';
+      launchConfetti();
+    } else {
+      msg.textContent = '🫂 It\'s okay, Shattoh. I\'m right here. Take your time. I\'m not going anywhere. 💗';
+    }
+  }
+  // ---- Virtual Hug ----
+  const hugMessages = [
+    'Wrapping you in the warmest, tightest hug ever, Shattoh! 🤗💖',
+    'I\'m squeezing you so tight right now, never letting go! 💕',
+    'This hug has all my love in it, Shattoh — feel it! 🌸',
+    'Hugging you until all your sadness disappears, my Shattoh! 💗',
+    'You are loved beyond words. This hug is proof! ✨💝',
+    'Sending you a hug filled with a million "I love you"s! 🥰',
+  ];
+  let hugIndex = 0;
+  function sendHug() {
+    const el = document.getElementById('hugMessage');
+    el.style.opacity = '0';
+    setTimeout(() => {
+      el.textContent = hugMessages[hugIndex % hugMessages.length];
+      el.style.opacity = '1';
+      hugIndex++;
+      launchConfetti();
+    }, 200);
+  }
+</script>
+</body>
+</html>
